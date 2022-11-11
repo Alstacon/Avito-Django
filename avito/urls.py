@@ -1,14 +1,16 @@
-
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from ads import views
+from avito import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/', views.index),
-    path('cat/', views.Categories.as_view()),
-    path('ad/', views.Ads.as_view()),
-    path('cat/<int:pk>/', views.CategorySingle.as_view()),
-    path('ad/<int:pk>/', views.AdSingle.as_view()),
+    path('ad/', include('ads.urls')),
+    path('user/', include('users.urls'))
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
