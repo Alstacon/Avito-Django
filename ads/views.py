@@ -2,13 +2,14 @@ import json
 
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from ads.models import Ad, Category
 from avito import settings
+from users.models import User
 
 
 def index(request):
@@ -115,8 +116,8 @@ class AdsListView(ListView):
                 "price": ad.price,
                 "description": ad.description,
                 "is_published": ad.is_published,
-                "category_id": ad.category.id,
-                "image": ad.image.url if ad.image.url else None
+                "category": ad.category.name,
+                "image": ad.image.url if ad.image else None
             } for ad in page_obj]
 
         response = [{
@@ -143,8 +144,8 @@ class AdSingleView(DetailView):
             "price": ad.price,
             "description": ad.description,
             "is_published": ad.is_published,
-            "category_id": ad.category.id,
-            "image": ad.image.url if ad.image.url else None
+            "category": ad.category.name,
+            "image": ad.image.url if ad.image else None
         })
 
 
@@ -158,22 +159,24 @@ class AdCreateView(CreateView):
               "price",
               "description",
               "is_published",
-              "category_id",
+              "category",
               "image"]
 
     def post(self, request, *args, **kwargs):
         ad_data = json.loads(request.body)
+        author = get_object_or_404(User, username=ad_data['author'])
+        category = get_object_or_404(Category, name=ad_data['category'])
+
 
         ad = Ad.objects.create(
             name=ad_data["name"],
-            author_id=ad_data["author_id"],
-            author=ad_data["author"],
+            author=author,
             price=ad_data["price"],
             description=ad_data["description"],
             is_published=ad_data["is_published"],
-            category_id=ad_data["category_id"],
-            image=ad_data["image"],
+            category=category,
         )
+
         return JsonResponse({
             "id": ad.id,
             "name": ad.name,
@@ -182,8 +185,9 @@ class AdCreateView(CreateView):
             "price": ad.price,
             "description": ad.description,
             "is_published": ad.is_published,
-            "category_id": ad.category.id,
-            "image": ad.image.url if ad.image.url else None
+            "category": ad.category.name,
+            "image": ad.image.url if ad.image else None
+
         })
 
 
@@ -194,18 +198,20 @@ class AdUpdateView(UpdateView):
               "price",
               "description",
               "is_published",
-              "category_id"]
+              "category"]
 
     def patch(self, request, *args, **kwargs):
         super().post(request, *args, **kwargs)
 
         ad_data = json.loads(request.body)
+        category = get_object_or_404(Category, name=ad_data['category'])
+
 
         self.object.name = ad_data["name"]
         self.object.price = ad_data["price"]
         self.object.description = ad_data["description"]
         self.object.is_published = ad_data["is_published"]
-        self.object.category_id = ad_data["category_id"]
+        self.object.category = category
 
         self.object.save()
 
@@ -217,8 +223,8 @@ class AdUpdateView(UpdateView):
             "price": self.object.price,
             "description": self.object.description,
             "is_published": self.object.is_published,
-            "category_id": self.object.category.id,
-            "image": self.object.image.url if self.object.image.url else None
+            "category": self.object.category.name,
+            "image": self.object.image.url if self.object.image else None
         })
 
 
@@ -241,8 +247,8 @@ class AdUploadImageView(UpdateView):
             "price": self.object.price,
             "description": self.object.description,
             "is_published": self.object.is_published,
-            "category_id": self.object.category.id,
-            "image": self.object.image.url if self.object.image.url else None
+            "category": self.object.category.name,
+            "image": self.object.image.url if self.object.image else None
         })
 
 
