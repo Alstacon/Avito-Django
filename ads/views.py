@@ -167,7 +167,6 @@ class AdCreateView(CreateView):
         author = get_object_or_404(User, username=ad_data['author'])
         category = get_object_or_404(Category, name=ad_data['category'])
 
-
         ad = Ad.objects.create(
             name=ad_data["name"],
             author=author,
@@ -205,7 +204,6 @@ class AdUpdateView(UpdateView):
 
         ad_data = json.loads(request.body)
         category = get_object_or_404(Category, name=ad_data['category'])
-
 
         self.object.name = ad_data["name"]
         self.object.price = ad_data["price"]
