@@ -1,6 +1,8 @@
 ## Домашнаяя работа № 27
-### Django: 
+### Django:
     - FBV, CBV, GenericViews
+    - DRF, Serializers
+    - ViewSet
     - CRUD
-    - Postgres (one2many, many2many, QuerySet, Aggregate, Join)
+    - Postgres (one2many, many2many, QuerySet, Aggregate, Join, Lookups)
     - Paginator
