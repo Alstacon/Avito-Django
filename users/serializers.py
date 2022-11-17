@@ -3,6 +3,18 @@ from rest_framework import serializers
 from users.models import User, Location
 
 
+class UserAdSerializer(serializers.ModelSerializer):
+    location = serializers.SlugRelatedField(
+        read_only=True,
+        many=True,
+        slug_field="name"
+    )
+
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "location"]
+
+
 class UserListSerializer(serializers.ModelSerializer):
     location = serializers.SlugRelatedField(
         read_only=True,
