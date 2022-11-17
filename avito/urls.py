@@ -3,17 +3,17 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from ads import views
+from ads.views.ad import AdViewSet
 from avito import settings
 from users.views import LocationViewSet
 
 router = routers.SimpleRouter()
 router.register('location', LocationViewSet)
+router.register('ad', AdViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/', views.index),
-    path('ad/', include('ads.urls')),
+    path('cat/', include('ads.urls.category')),
     path('user/', include('users.urls'))
 ]
 

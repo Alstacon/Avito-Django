@@ -1,3 +1,4 @@
+from django.db.models import Count
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.viewsets import ModelViewSet
 
@@ -7,7 +8,7 @@ from users.serializers import UserCreateSerializer, UserListSerializer, UserDeta
 
 
 class UsersListView(ListAPIView):
-    queryset = User.objects.all()
+    queryset = User.objects.annotate(ads=Count('ad'))
     serializer_class = UserListSerializer
 
 
