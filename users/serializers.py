@@ -9,6 +9,7 @@ class UserListSerializer(serializers.ModelSerializer):
         many=True,
         slug_field="name"
     )
+    ads = serializers.IntegerField()
 
     class Meta:
         model = User
