@@ -23,6 +23,8 @@ class CategoriesListView(ListView):
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
 
+
+
         self.object_list = self.object_list.order_by("name")
 
         response = [{
