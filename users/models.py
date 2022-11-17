@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Count
 
 
 class Location(models.Model):
@@ -36,3 +37,7 @@ class User(models.Model):
 
     def __str__(self):
         return self.username
+
+    @property
+    def total_ads(self):
+        return self.ads.filter(is_published=True).count()
