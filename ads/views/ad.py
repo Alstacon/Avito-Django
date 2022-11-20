@@ -43,8 +43,8 @@ class AdViewSet(ModelViewSet):
                 author__location__name__icontains=loc_name
             )
 
-        price_from = request.GET.get("price_from", None)
-        price_to = request.GET.get("price_to", None)
+        price_from = request.GET.get("price_from")
+        price_to = request.GET.get("price_to")
         if price_from:
             self.queryset = self.queryset.filter(price__gte=price_from)
         if price_to:
