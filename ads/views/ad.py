@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import UpdateView
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.viewsets import ModelViewSet
 
 from ads.models import Ad, Category
@@ -20,6 +21,15 @@ class AdViewSet(ModelViewSet):
     serializers = {
         'retrieve': AdDetailSerializer
     }
+
+    default_permission = [AllowAny(), ]
+    permissions = {
+        'retrieve': [IsAuthenticated(), ],
+    }
+
+    def get_permissions(self):
+        return self.permissions.get(self.action, self.default_permission)
+
 
     def get_serializer_class(self):
         return self.serializers.get(self.action, self.default_serializer)
@@ -75,3 +85,6 @@ class AdUploadImageView(UpdateView):
             "category": self.object.category.name,
             "image": self.object.image.url if self.object.image else None
         })
+
+
+
