@@ -4,9 +4,10 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 from ads.models import Category
-
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -39,22 +40,23 @@ class CategorySingleView(DetailView):
         })
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class CategoryCreateView(CreateView):
-    model = Category
-    fields = ["name"]
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def category_create_view(request):
+    # model = Category
+    # fields = ["name"]
 
-    def post(self, request, *args, **kwargs):
-        cat_data = json.loads(request.body)
+    # def post(self, request, *args, **kwargs):
+    cat_data = json.loads(request.body)
 
-        cat = Category.objects.create(
-            name=cat_data["name"],
-        )
+    cat = Category.objects.create(
+        name=cat_data["name"],
+    )
 
-        return JsonResponse({
-            "id": cat.id,
-            "name": cat.name,
-        })
+    return JsonResponse({
+        "id": cat.id,
+        "name": cat.name,
+    })
 
 
 @method_decorator(csrf_exempt, name='dispatch')
