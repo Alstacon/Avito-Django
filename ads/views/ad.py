@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.viewsets import ModelViewSet
 
 from ads.models import Ad, Category
+from ads.permissions import IsOwnerOrStaff
 from ads.serializers import AdSerializer, AdDetailSerializer
 
 
@@ -25,11 +26,13 @@ class AdViewSet(ModelViewSet):
     default_permission = [AllowAny(), ]
     permissions = {
         'retrieve': [IsAuthenticated(), ],
+        'update': [IsAuthenticated(), IsOwnerOrStaff(), ],
+        'partial_update': [IsAuthenticated(), IsOwnerOrStaff(), ],
+        'destroy': [IsAuthenticated(), IsOwnerOrStaff(), ]
     }
 
     def get_permissions(self):
         return self.permissions.get(self.action, self.default_permission)
-
 
     def get_serializer_class(self):
         return self.serializers.get(self.action, self.default_serializer)
@@ -85,6 +88,3 @@ class AdUploadImageView(UpdateView):
             "category": self.object.category.name,
             "image": self.object.image.url if self.object.image else None
         })
-
-
-

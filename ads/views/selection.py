@@ -22,7 +22,7 @@ class SelectionCreateView(CreateAPIView):
 
 class SelectionUpdateView(UpdateAPIView):
     queryset = Selection.objects.all()
-    serializer_class = SelectionDetailSerializer
+    serializer_class = SelectionCreateSerializer
     permission_classes = [IsOwner]
 
 

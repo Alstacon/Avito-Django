@@ -6,6 +6,7 @@ from users.serializers import UserAdSerializer
 
 
 class AdSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Ad
         fields = '__all__'
@@ -56,3 +57,4 @@ class SelectionCreateSerializer(serializers.ModelSerializer):
 
     def validate_owner(self, value):
         return self.context['request'].user
+
