@@ -9,7 +9,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from ads.models import Ad, Category
 from ads.permissions import IsOwnerOrStaff
-from ads.serializers import AdSerializer, AdDetailSerializer
+from ads.serializers import AdSerializer, AdDetailSerializer, AdCreateSerializer
 
 
 def index(request):
@@ -20,7 +20,8 @@ class AdViewSet(ModelViewSet):
     queryset = Ad.objects.all()
     default_serializer = AdSerializer
     serializers = {
-        'retrieve': AdDetailSerializer
+        'retrieve': AdDetailSerializer,
+        'create': AdCreateSerializer,
     }
 
     default_permission = [AllowAny(), ]

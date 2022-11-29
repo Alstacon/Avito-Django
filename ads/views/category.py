@@ -43,10 +43,7 @@ class CategorySingleView(DetailView):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def category_create_view(request):
-    # model = Category
-    # fields = ["name"]
 
-    # def post(self, request, *args, **kwargs):
     cat_data = json.loads(request.body)
 
     cat = Category.objects.create(
