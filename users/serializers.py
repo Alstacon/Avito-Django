@@ -1,6 +1,9 @@
+from django.core.validators import RegexValidator
 from rest_framework import serializers
 
+from avito import settings
 from users.models import User, Location
+from users.validators import EmailValidator
 
 
 class UserAdSerializer(serializers.ModelSerializer):
@@ -47,6 +50,13 @@ class UserCreateSerializer(serializers.ModelSerializer):
         queryset=Location.objects.all(),
         slug_field="name"
     )
+
+    email = serializers.EmailField(max_length=50, validators=[EmailValidator(settings.DISABLED_EMAILS)])
+    password = serializers.CharField(max_length=150, validators=[RegexValidator(
+        '^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_-])[\da-zA-Z!@#$%^&*()_-]{6,}$',
+        message="Weak password."
+                "Your password must contain at least 1 upper case, lower case, numeric, and special character."
+                "Passwords must be at least 6 characters in length.")])
 
     class Meta:
         model = User
@@ -106,5 +116,3 @@ class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
         fields = '__all__'
-
-

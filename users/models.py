@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
 
-from users.validators import age_validator, email_validator
+from users.validators import age_validator
 
 
 class Location(models.Model):
@@ -35,10 +35,8 @@ class User(AbstractUser):
     age = models.PositiveSmallIntegerField(null=True)
     location = models.ManyToManyField(Location)
     birth_date = models.DateField(validators=[age_validator], null=True)
-    email = models.EmailField(max_length=50, unique=True, validators=[email_validator], null=True)
-    password = models.CharField(max_length=150, validators=[RegexValidator(
-        '^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\da-zA-Z]{6,}$',
-        message="Weak password")])
+    email = models.EmailField(max_length=50, unique=True, null=True)
+    password = models.CharField(max_length=150)
 
     class Meta:
         verbose_name = 'Пользователь'
