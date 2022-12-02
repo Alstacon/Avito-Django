@@ -1,4 +1,4 @@
-## Домашнаяя работа № 27
+## Домашние работы № 27-31
 ### Django:
     - FBV, CBV, GenericViews
     - DRF, Serializers
@@ -6,3 +6,7 @@
     - CRUD
     - Postgres (one2many, many2many, QuerySet, Aggregate, Join, Lookups)
     - Paginator
+    - SimpleJWT
+    - Permissions
+    - Validators
+    - Pytest (fixtures, factories)
