@@ -19,3 +19,4 @@ def test_ad_list(client, token):
 
     assert response.status_code == 200
     assert response.data == expected_response
+

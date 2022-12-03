@@ -26,7 +26,7 @@ def token(client, django_user_model):
 @pytest.mark.django_db
 def user(django_user_model):
     username = 'user'
-    password = '123Qwe'
+    password = '123Qwe)'
 
     django_user_model.objects.create_user(
         username=username,
