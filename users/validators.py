@@ -1,11 +1,12 @@
 from datetime import date
 
+from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 
 def age_validator(value):
-    if (date.today() - value).days // 365 < 9:
+    if relativedelta(date.today(), value).years < 9:
         raise ValidationError('Only users over the age of nine can register.')
 
 

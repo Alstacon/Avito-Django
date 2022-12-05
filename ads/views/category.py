@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
@@ -14,6 +16,10 @@ from ads.models import Category
 class CategoriesListView(ListView):
     model = Category
 
+    @extend_schema(
+        description="Retrieve category list",
+        summary="Category list"
+    )
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
 
@@ -40,10 +46,25 @@ class CategorySingleView(DetailView):
         })
 
 
+@extend_schema(
+    description="Create category",
+    summary="Create category",
+    request={
+        "application/json": {
+            "name": "name",
+            "slug": "slug"
+        },
+    },
+    responses={
+        "application/json": {
+            "name": "name",
+            "slug": "slug"
+        }
+    }
+)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def category_create_view(request):
-
     cat_data = json.loads(request.body)
 
     cat = Category.objects.create(

@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import UpdateView
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.viewsets import ModelViewSet
 
@@ -16,6 +17,16 @@ def index(request):
     return JsonResponse({"status": "ok"}, status=200)
 
 
+@extend_schema_view(
+    list=extend_schema(
+        description="Retrieve ad list",
+        summary="Ad list"
+    ),
+    create=extend_schema(
+            description="Create ad",
+            summary="Create ad"
+        ),
+)
 class AdViewSet(ModelViewSet):
     queryset = Ad.objects.all()
     default_serializer = AdSerializer
@@ -32,11 +43,14 @@ class AdViewSet(ModelViewSet):
         'destroy': [IsAuthenticated(), IsOwnerOrStaff(), ]
     }
 
+    http_method_names = ['get', 'post', 'delete', 'create', 'patch']
+
     def get_permissions(self):
         return self.permissions.get(self.action, self.default_permission)
 
     def get_serializer_class(self):
         return self.serializers.get(self.action, self.default_serializer)
+
 
     def list(self, request, *args, **kwargs):
         cat_names = request.GET.getlist("category")
@@ -65,6 +79,7 @@ class AdViewSet(ModelViewSet):
             self.queryset = self.queryset.filter(price__lte=price_to)
 
         return super().list(request, *args, **kwargs)
+
 
 
 @method_decorator(csrf_exempt, name='dispatch')

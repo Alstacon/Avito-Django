@@ -15,6 +15,7 @@ djangorestframework-simplejwt = "^5.2.2"
 pytest-django = "^4.5.2"
 pytest-factoryboy = "^2.5.0"
 envparse = "^0.2.0"
+drf-spectacular = "^0.24.2"
 
 
 [build-system]

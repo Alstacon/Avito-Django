@@ -12,7 +12,7 @@ def test_selection_create(client, token):
         "id": 1,
         "owner": 1,
         "name": "Test selection",
-        "items": [1, 2, 3]
+        "items": [ad.pk for ad in ads]
     }
 
     data = {
